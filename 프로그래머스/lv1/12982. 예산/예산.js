@@ -7,14 +7,8 @@ function solution(d, budget) {
         if(sum > budget) {
             answer = i
             break
-        } else if(sum === budget) {
-            answer = i + 1
-            break
         } else {
-            if(i === ascD.length - 1) {
-                answer = i + 1
-                break
-            }
+            answer = i + 1
         }
     }
     return answer;
