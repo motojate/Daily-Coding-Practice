@@ -1,4 +1,8 @@
 function solution(arr)
 {
-    return arr.filter((data, idx) => data !== arr[idx - 1]);
+    var answer = [];
+
+    answer = arr.filter((data, idx) => data !== arr[idx - 1])
+    
+    return answer;
 }
