@@ -14,8 +14,7 @@ function solution(n, arr1, arr2) {
 }
 
 const convertBinaryNum = (binaryNum, n) => {
-    if(binaryNum.length < n) binaryNum = "0".repeat(n - binaryNum.length) + binaryNum;
-    return binaryNum
+    return "0".repeat(n - binaryNum.length) + binaryNum;
 }
 
 const convertWall = (str) => {
