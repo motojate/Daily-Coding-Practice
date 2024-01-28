@@ -1,7 +1,5 @@
 function solution(k, score) {
     const buffer = [];
-    
-    
     return score.map((data, idx) => {
         if(idx < k) buffer.push(data);
         else {
