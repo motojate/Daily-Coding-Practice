@@ -9,9 +9,7 @@ function solution(answers) {
         if(answers[i] === a2[i % a2.length]) a2Ans++;
         if(answers[i] === a3[i % a3.length]) a3Ans++;
     }
-    console.log(a1Ans, a2Ans, a3Ans);
     const maxVal = Math.max(a1Ans, a2Ans, a3Ans);
-    if(maxVal === 0) return [];
     if(maxVal === a1Ans) answer.push(1);
     if(maxVal === a2Ans) answer.push(2);
     if(maxVal === a3Ans) answer.push(3);
