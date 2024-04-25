@@ -1,14 +1,12 @@
 function solution(n, m, section) {
-  let answer = 0;
-
-  let part = 0;
-
-  section.forEach((n) => {
-    if (n > part) {
-      part = n + m - 1;
-      answer++;
+    var answer = 0;
+    let colorWall = 0;
+    
+    for(let i = 0; i < section.length; i++) {
+        if(colorWall >= section[i]) continue;
+        colorWall = section[i] + m - 1;
+        answer++;
     }
-  });
-
-  return answer;
+    
+    return answer;
 }
