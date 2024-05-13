@@ -5,7 +5,9 @@ function solution(numbers, target) {
     
     const bfs = (y, x, result) => {
         const currentData = numbersGraph[y][x];
+        
         if(x === numbers.length - 1) return result + currentData === target ? answer++ : null;
+        
         bfs(0, x + 1, result + currentData);
         bfs(1, x + 1, result + currentData);
     }
