@@ -1,3 +1,6 @@
 function solution(number) {
-    return BigInt(number) % 9n;
+    return [...number].reduce((acc, item) => {
+        acc += +item;
+        return acc;
+    }, 0) % 9;
 }
