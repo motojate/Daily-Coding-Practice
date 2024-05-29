@@ -1,11 +1,10 @@
 function solution(s){
-    const buffer = [];
-    for(const str of s) {
-        if(str === "(") buffer.push(str);
-        else {
-            if(buffer.length === 0) return false;
-            else buffer.pop();
+    let cum = 0
+    for (let paren of s) {
+        cum += paren === '('? 1: -1
+        if(cum < 0) {
+            return false
         }
     }
-    return buffer.length === 0;
+    return cum === 0 ? true: false;
 }
