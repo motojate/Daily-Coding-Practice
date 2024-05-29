@@ -1,16 +1,14 @@
 function solution(people, limit) {
-    var answer = 0;
+    let answer = 0;
     people.sort((a, b) => a - b);
     while(people.length > 0) {
-        if(people.length === 1) {
-            answer++;
+        if(people.length === 1) people.pop();
+        else {
+            const [light, heavy] = [people[0], people[people.length - 1]];
+            if(heavy + light <= limit) people.shift();
             people.pop();
-            break;
         }
-        const maxWeight = people[people.length - 1];
-        const minWeight = people[0];
-        if(maxWeight + minWeight <= limit) people.shift();
-        people.pop();
+        
         answer++;
     }
     return answer;
