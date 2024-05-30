@@ -1,13 +1,14 @@
-function solution(n,a,b)
-{
+function solution(n,a,b) {
     var answer = 0;
-    [a, b] = [Math.min(a, b), Math.max(a, b)];
     
-    while(a != b) {
-        a = Math.ceil(a / 2);
-        b = Math.ceil(b / 2);
+    while(a !== b) {
+        [a, b] = [getNextStage(a), getNextStage(b)];
         answer++;
     }
-
+    
     return answer;
+}
+
+const getNextStage = (stage) => {
+    return Math.ceil(stage / 2);
 }
