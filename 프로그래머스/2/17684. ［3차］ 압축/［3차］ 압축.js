@@ -6,12 +6,13 @@ function solution(msg) {
         let idx = i;
         let word = msg[i];
         while(true) {
+            const findWord = word + msg[++idx];
             if(idx >= msg.length) break;
-            if(mapper.includes(word + msg[++idx])) {
-                word += msg[idx];
+            if(mapper.includes(findWord)) {
+                word = findWord;
                 i++;
             } else {
-                mapper.push(word + msg[idx]);
+                mapper.push(findWord);
                 break;
             }
         }
