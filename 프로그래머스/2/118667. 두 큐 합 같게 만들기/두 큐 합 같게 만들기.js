@@ -20,7 +20,7 @@ function solution(queue1, queue2) {
     
     while(true) {
         if(sum1 === sum) break;
-        if(count > length * 2) return -1;
+        if(count > queue1.length * 3) return -1;
         
         count++;
         
