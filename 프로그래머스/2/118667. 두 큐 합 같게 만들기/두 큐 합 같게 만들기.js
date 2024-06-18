@@ -8,40 +8,29 @@ function solution(queue1, queue2) {
     
     const sum = (sum1 + sum2) / 2;
     
-    const queue = [...queue1, ...queue2];
-    const length = queue.length;
+    const queue = [...queue1, ...queue2, ...queue1];
+    let q1Idx = 0;
+    let q2Idx = queue1.length;
+    
     let count = 0;
     
-    let q1Start = 0;
-    let q1End = queue1.length - 1;
-    let q2Start = q1End + 1;
-    let q2End = queue.lenth - 1;
-    
-    
-    while(true) {
+    for(let i = 0; i < queue.length; i++) {
         if(sum1 === sum) break;
-        if(count > queue1.length * 3) return -1;
-        
-        count++;
-        
         if(sum1 > sum) {
-            const data = queue[q1Start];
+            const data = queue[q1Idx];
             sum1 -= data;
             sum2 += data;
-            
-            q2End = q1Start;
-            q1Start = (q1Start + 1) % length;
+            q1Idx++;
         } else {
-            const data = queue[q2Start];
-
+            const data = queue[q2Idx];
             sum2 -= data;
             sum1 += data;
-            
-            q1End = q2Start;
-            q2Start = (q2Start + 1) % length;
+            q2Idx++;
         }
-        
         if(sum1 === 0 || sum2 === 0) return -1;
+        
+        count++;
     }
-    return count;
+    
+    return sum1 === sum ? count : -1;
 }
