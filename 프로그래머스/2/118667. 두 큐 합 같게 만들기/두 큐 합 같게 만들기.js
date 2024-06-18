@@ -16,20 +16,20 @@ function solution(queue1, queue2) {
     let count = 0;
     
     while(true) {
-        if(count >= queue1.length * 3) return -1;
+        if(count >= queue1.length * 2 + 5) return -1;
         if(sum1 === sum) break;
         
         count++;
         
         if(sum1 > sum) {
             const data = minHeap1.pop();
-            data.idx = minHeap2.size();
+            data.idx = minHeap2.getLastIdx() + 1;
             minHeap2.insert(data);
             sum1 -= data.value;
             sum2 += data.value;
         } else {
             const data = minHeap2.pop();
-            data.idx = minHeap1.size();
+            data.idx = minHeap1.getLastIdx() + 1;
             minHeap1.insert(data);
             sum2 -= data.value;
             sum1 += data.value;
@@ -43,6 +43,10 @@ function solution(queue1, queue2) {
 class MinHeap {
     constructor() {
         this.heap = [];
+    }
+    
+    getLastIdx() {
+        return this.heap[this.size() - 1].idx;
     }
     
     insert(data) {
