@@ -1,6 +1,7 @@
 function solution(board) {
-    let answer = 0;
-    if(board[0][0] === 1) answer = 1;
+    const zRow = [];
+    board.forEach(v => board.push(v[0]));
+    let answer = Math.max(...board[0], ...zRow);
     
     for(let i = 1; i < board.length; i++) {
         for(let j = 1; j < board[i].length; j++) {
