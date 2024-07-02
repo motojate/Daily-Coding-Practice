@@ -57,5 +57,5 @@ function solution(m, n, board) {
 
 const replaceZero = (str) => {
     const nonZeroPart = str.replace(/0/g, '');
-    return '0'.repeat(str.length - nonZeroPart.length) + nonZeroPart; // '0'들을 앞에 붙이고 나머지 문자열을 뒤에 붙임
+    return '0'.repeat(str.length - nonZeroPart.length) + nonZeroPart;
 }
