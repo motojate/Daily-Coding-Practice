@@ -1,10 +1,10 @@
 function solution(m, n, board) {
     board = board.map((v) => v.split(''));
-    const col = board[0].length;
-    const row = board.length;
+    const col = n;
+    const row = m;
     let answer = 0;
     
-    const deleteBlock = () => {
+    const changeRow = () => {
         for(let i = 0; i < col; i++) {
             let rowData = '';
             for(let j = 0; j < row; j++) {
@@ -46,7 +46,7 @@ function solution(m, n, board) {
                 const [i, j] = set.split('-').map(Number);
                 board[i][j] = '0';
             }
-            deleteBlock();
+            changeRow();
             blockBoom();
         }
     }
