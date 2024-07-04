@@ -1,52 +1,57 @@
 function solution(tickets) {
-  const graph = new Map();
-  const visited = new Map();
-  let answer = [];
+    // 1. 그래프를 저장하기 위하여 Map() 객체 생성.
+    const graph = new Map();
+    const answer = [];
 
-  // 그래프 구성 및 방문 맵 초기화
-  for (const [from, to] of tickets) {
-    if (!graph.has(from)) graph.set(from, []);
-    graph.get(from).push(to);
-
-    const fromToStr = generateFromToStr(from, to);
-    if (!visited.has(fromToStr)) visited.set(fromToStr, 0);
-    visited.set(fromToStr, visited.get(fromToStr) + 1); // 중복 경로 처리
-  }
-
-  // 그래프 정렬
-  for (const [key, value] of graph.entries()) {
-    value.sort();
-  }
-
-  // DFS 함수 정의
-  const dfs = (from, list) => {
-    list.push(from);
-
-    if (list.length === tickets.length + 1) {
-      answer = list.slice(); // 가능한 경로 중 하나를 answer에 복사
-      return true; // 경로 찾음
+    // 2. 그래프 구성.
+    for(const [from, to] of tickets) {
+        if(!graph.has(from)) graph.set(from, []);
+        graph.get(from).push(to);
     }
-
-    const toList = graph.get(from) ?? [];
-    for (const to of toList) {
-      const fromToStr = generateFromToStr(from, to);
-      if (visited.get(fromToStr) > 0) {
-        visited.set(fromToStr, visited.get(fromToStr) - 1);
-        const found = dfs(to, list);
-        if (found) return true; // 유효한 경로를 찾으면 종료
-        visited.set(fromToStr, visited.get(fromToStr) + 1);
-      }
+    
+    // 3-1. dfs 함수 정의. from은 출발지, path는 현재까지의 경로.
+    const dfs = (from, path) => {
+        
+        // 3-2. 현재 경로에 from을 추가.
+        path.push(from);
+        
+        if(!graph.has(from) || graph.get(from).length === 0) {
+            // 3-3. 더 이상 갈 수 없을 때 경로 저장. 이 때 path는 계속 사용하므로, 복사본을 저장.
+            
+            const clonePath = [...path];
+            
+            if(answer.length === 0) answer.push(clonePath);
+            else {
+                if(clonePath.length > answer[0].length) {
+                    answer.pop();
+                    answer.push(clonePath);
+                }
+                if(answer[0].length === clonePath.length) answer.push(clonePath);
+            }
+        } else {
+            // 3-4. 현재 노드에서 갈 수 있는 모든 노드를 탐색.
+            const toList = graph.get(from);
+            
+            for(let i = 0; i < toList.length; i++) {
+                const to = toList[i];
+                
+                // 3-5. 현재 사용한 티켓(경로) 제거.
+                toList.splice(i, 1);
+                
+                // 3-6. 다음 목적지를 재귀적으로 탐색.
+                dfs(to, path);
+                
+                // 3-7. 다음 탐색을 위하여 티켓 반환을 하는 백트래킹 작업 실행.
+                toList.splice(i, 0, to);
+            }
+        }
+        
+        // 3-8. 더 이상 갈 곳이 없다면, 이후 탐색을 위한 현재 경로를 제거 (백트래킹).
+        path.pop();
     }
-
-    list.pop();
-    return false;
-  };
-
-  // ICN에서 시작
-  dfs("ICN", []);
-  return answer;
+    
+    // 4. dfs 함수 실행. 시작 위치는 ICN.
+    dfs("ICN", []);
+    
+    return answer.sort()[0];
 }
-
-const generateFromToStr = (from, to) => {
-  return `${from}${to}`;
-};
