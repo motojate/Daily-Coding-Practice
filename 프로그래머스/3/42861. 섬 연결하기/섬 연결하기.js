@@ -1,26 +1,33 @@
 function solution(n, costs) {
     let answer = 0;
-    const parentSet = Array.from({ length: n }, (_, idx) => idx);
+    const parentMap = new Map();
+    
+    for(let i = 0; i < n; i++) parentMap.set(i, i);
+    
+    const find = (x) => {
+        if(parentMap.get(x) === x) return x;
+        const root = find(parentMap.get(x));
+        parentMap.set(x, root);
+        return root;
+    }
+    
+    const union = (a, b) => {
+        const rootA = find(a);
+        const rootB = find(b);
+        if(rootA !== rootB) parentMap.set(rootB, rootA);
+    }
     
     costs.sort((a, b) => a[2] - b[2]);
     
     for(const [a, b, cost] of costs) {
-        const aP = parentSet[a];
-        const bP = parentSet[b];
+        const rootA = find(a);
+        const rootB = find(b);
         
-        if(aP === bP) continue;
-        
-        if(aP > bP) setParent(parentSet, aP, bP);
-        else setParent(parentSet, bP, aP);
-        
-        answer += cost;
+        if(rootA !== rootB) {
+            union(a, b);
+            answer += cost;
+        }
     }
 
     return answer;
-}
-
-const setParent = (arr, a, b) => {
-    for(let i = 0; i < arr.length; i++) {
-        if(arr[i] === a) arr[i] = b;
-    }
 }
