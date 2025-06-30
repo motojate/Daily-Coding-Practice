@@ -1,37 +1,46 @@
-function solution(diffs, times, limit) {
-    const diffMap = new Map();
-    let totalC = times[0];
-    
-    for (let i = 1; i < diffs.length; i++) {
-        const diff = diffs[i];
-        const timeC = times[i] + times[i - 1];
-        
-        diffMap.set(diff, (diffMap.get(diff) ?? 0) + timeC);
-        
-        totalC += times[i];
-    }
-    
+function solution(diffs, times, limitValue) {
     let min = 1;
     let max = 100_000;
-    
-    const calculator = (level) => {
-        let sum = totalC;
-        
-        for (const [diff, timeC] of diffMap) {
-            if (diff > level) sum += (diff - level) * timeC;
-        }
-        
-        return sum;
+
+    // 사전 누적 계산
+    const timeCosts = [];
+    for (let i = 1; i < times.length; i++) {
+        timeCosts.push({
+            diff: diffs[i],
+            cost: (times[i] + times[i - 1]),
+            time: times[i]
+        });
     }
-        
+
+    const calculator = (level) => {
+        let total = times[0]; // 처음은 무조건 포함
+
+        for (const { diff, cost, time } of timeCosts) {
+            if (level >= diff) {
+                total += time;
+            } else {
+                total += (diff - level) * cost + time;
+            }
+
+            if (total > limitValue) break; // 조기 탈출 (early exit)
+        }
+
+        return total;
+    };
+
+    // 이분 탐색
+    let answer = max;
     while (min <= max) {
         const mid = Math.floor((min + max) / 2);
         const result = calculator(mid);
-        
-        if (result <= limit) max = mid - 1;
-        else min = mid + 1;
+
+        if (result <= limitValue) {
+            answer = mid;
+            max = mid - 1;
+        } else {
+            min = mid + 1;
+        }
     }
-    
-    return min;
-    
+
+    return answer;
 }
