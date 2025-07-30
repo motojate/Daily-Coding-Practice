@@ -1,62 +1,44 @@
 function solution(points, routes) {
     let answer = 0;
+    const visited = new Map();
     
-    const timeMap = new Map();
+    const visit = (x, y, t) => {
+        const key = `${t}-${x}-${y}`;
+        const count = visited.get(key) ?? 0;
+        
+        if (count === 1) answer++;
+        
+        visited.set(key, count + 1);
+    }
     
     for (const route of routes) {
         let time = 0;
         
-        let spotIndex = -1;
+        let [prevX, prevY] = [-1, -1];
         
-        while (route.length) {
-            const routeIndex = route.shift() - 1;
-            const [x, y] = points[routeIndex];
+        for (let i = 0; i < route.length; i++) {
+            const [x, y] = points[route[i] - 1];
             
-            if (spotIndex === -1) {
-                const times = timeMap.get(time) ?? [];
-                times.push([x, y]);
-                timeMap.set(time++, times);
+            if (i === 0) {
+                visit(time++, x, y);
             } else {
-                const [px, py] = points[spotIndex];
-                const [r, c] = [x - px, y - py];
+                const [dx, dy] = [x - prevX, y - prevY];
                 
-                for (let i = 0; i < Math.abs(r); i++) {
-                    let cx = px;
-                    
-                    if (r < 0) cx -= (i + 1);
-                    else cx += (i + 1);
-                    
-                    const times = timeMap.get(time) ?? [];
-                    times.push([cx, py]);
-                    timeMap.set(time++, times);
+                const stepX = Math.sign(dx);
+                const stepY = Math.sign(dy);
+                
+                for (let j = 1; j <= Math.abs(dx); j++) {
+                    visit(time++, prevX + stepX * j, prevY);
                 }
                 
-                for (let i = 0; i < Math.abs(c); i++) {
-                    let cy = py;
+                for (let j = 1; j <= Math.abs(dy); j++) {
+                    visit(time++, x, prevY + stepY * j);
+                }
                     
-                    if (c < 0) cy -= (i + 1);
-                    else cy += (i + 1);
-                    
-                    const times = timeMap.get(time) ?? [];
-                    times.push([x, cy]);
-                    timeMap.set(time++, times);
-                }            
             }
-            spotIndex = routeIndex;
+            
+            [prevX, prevY] = [x, y];
         }
-    }
-    
-    const counter = new Map();
-    
-    for (const [time, value] of timeMap) {
-        for (const [x, y] of value) {
-            const key = `${time},${x},${y}`;
-            counter.set(key, (counter.get(key) || 0) + 1);
-        }
-    }
-
-    for (const [key, count] of counter) {
-        if (count >= 2) answer++;
     }
     
     return answer;
